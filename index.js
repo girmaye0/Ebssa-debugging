@@ -13,11 +13,6 @@ let attempts = 0;
 const maxNumberOfAttempts = 5;
 
 // Returns a random number from min (inclusive) to max (exclusive)
-// Usage:
-// > getRandomNumber(1, 50)
-// <- 32
-// > getRandomNumber(1, 50)
-// <- 11
 function getRandomNumber(min, max) {
   return Math.floor(Math.random() * (max - min)) + min;
 }
@@ -25,9 +20,11 @@ function getRandomNumber(min, max) {
 function checkGuess() {
   // Get value from guess input element
   const guess = parseInt(guessInput.value, 10);
-  attempts = attempts + 1;
+  attempts++; // Increment attempts before checks
 
   hideAllMessages();
+
+//else block was missing and unsupported token '!=='
 
   if (guess === targetNumber) {
     numberOfGuessesMessage.style.display = '';
@@ -37,22 +34,19 @@ function checkGuess() {
 
     submitButton.disabled = true;
     guessInput.disabled = true;
-  }
-
-  if (guess !== targetNumber) {
+  } else {
     if (guess < targetNumber) {
       tooLowMessage.style.display = '';
     } else {
-      tooLowMessage.style.display = '';
+      tooHighMessage.style.display = '';
     }
 
     const remainingAttempts = maxNumberOfAttempts - attempts;
-
     numberOfGuessesMessage.style.display = '';
-    numberOfGuessesMessage.innerHTML = `You guessed ${guess}. <br> ${remainingAttempts} guesses remaining`;
+    numberOfGuessesMessage.innerHTML = `You guessed ${guess}.<br> ${remainingAttempts} guesses remaining`;
   }
-
-  if (attempts ==== maxNumberOfAttempts) {
+//unexpected and unsupported token '====' removed & Check for '>=' to handle max attempts
+  if (attempts >= maxNumberOfAttempts) { 
     submitButton.disabled = true;
     guessInput.disabled = true;
   }
@@ -61,23 +55,24 @@ function checkGuess() {
 
   resetButton.style.display = '';
 }
-
+// unexpected token '<=' replaced by '<'
 function hideAllMessages() {
-  for (let elementIndex = 0; elementIndex <= messages.length; elementIndex++) {
+  for (let elementIndex = 0; elementIndex < messages.length; elementIndex++) {
     messages[elementIndex].style.display = 'none';
   }
 }
 
-funtion setup() {
+function setup() {
   // Get random number
   targetNumber = getRandomNumber(1, 100);
   console.log(`target number: ${targetNumber}`);
 
   // Reset number of attempts
-  maxNumberOfAttempts = 0;
+  // Reset attempts on setup but it was ' maxNumberOfAttempts'
+  attempts = 0; 
 
   // Enable the input and submit button
-  submitButton.disabeld = false;
+  submitButton.disabled = false;
   guessInput.disabled = false;
 
   hideAllMessages();
@@ -87,4 +82,8 @@ funtion setup() {
 submitButton.addEventListener('click', checkGuess);
 resetButton.addEventListener('click', setup);
 
-setup();
+setup(); // Call setup function to start the game
+
+
+
+
